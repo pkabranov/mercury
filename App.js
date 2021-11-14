@@ -20,6 +20,7 @@
 //   },
 // });
 import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { NativeBaseProvider, Box } from 'native-base';
 
 export default function App() {
