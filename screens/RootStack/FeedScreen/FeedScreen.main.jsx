@@ -16,6 +16,7 @@ import "firebase/firestore";
 export default function FeedScreen({ navigation }) {
   const [items, setItems] = useState([]);
   const [search, setSearch] = useState("");
+  const [mode, setMode] = useState("");
 
   useEffect(() => {
     const unsubscribe = firebase
@@ -45,7 +46,15 @@ export default function FeedScreen({ navigation }) {
     let meetsSearchCriteria =
       item.shortDescription.includes(search) || item.location.includes(search);
 
-    if (meetsSearchCriteria) {
+    let meetsModeCriteria = true
+    if (mode === 'finder'){
+      meetsModeCriteria = item.lost
+    }
+    if (mode === 'seeker'){
+      meetsModeCriteria = item.found
+    }
+
+    if (meetsSearchCriteria && meetsModeCriteria && !item.resolved) {
       return (
         <Box>
           <Button onPress={() => navigation.navigate("DetailScreen", { object: item })}>
@@ -87,6 +96,14 @@ export default function FeedScreen({ navigation }) {
         justifyContent="center"
       >
         <Heading>Item Listing</Heading>
+        <HStack>
+          <Button onPress = {() => setMode("finder")}>
+            Finder Mode
+          </Button>
+          <Button onPress = {() => setMode("seeker")}>
+            Seeker Mode
+          </Button>
+        </HStack>
         <SearchBar
           placeholder="Search"
           onChangeText={setSearch}
