@@ -7,8 +7,9 @@ import SignUpScreen from "./screens/AuthStack/SignUpScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthStackScreen } from "./screens/AuthStack/AuthStackScreen";
 import { NavigationContainer } from "@react-navigation/native";
-import FeedScreen from "./screens/AuthStack/FeedScreen/FeedScreen.main";
-import DetailScreen from "./screens/AuthStack/DetailScreen/DetailScreen.main";
+import FeedScreen from "./screens/FeedScreen/FeedScreen.main";
+import DetailScreen from "./screens/DetailScreen/DetailScreen.main";
+import ReportScreen from "./screens/ReportScreen/ReportScreen.main";
 import firebase from 'firebase'
 
 AppRegistry.registerComponent('main', () => App);
@@ -32,6 +33,12 @@ export default function App() {
             name="Detail"
             component={DetailScreen}
           />
+          <Stack.Group screenOptions={{ presentation: 'modal' }}>
+            <Stack.Screen
+              name="Report"
+              component={ReportScreen}
+            />
+          </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

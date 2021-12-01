@@ -59,7 +59,7 @@ export const Example = () => {
             Forgot Password?
           </Link>
         </FormControl>
-        <Button mt="2" colorScheme="orange">
+        <Button mt="2" colorScheme="orange" onPress={() => navigation.navigate("Feed")}>
           Sign in
         </Button>
         <HStack mt="6" justifyContent="center">
