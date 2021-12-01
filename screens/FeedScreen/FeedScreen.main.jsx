@@ -26,6 +26,7 @@ export default function FeedScreen({ navigation }) {
     const unsubscribe = firebase
       .firestore()
       .collection("items")
+      .orderBy("timeLost", "desc")
       .onSnapshot((querySnapshot) => {
         let newItems = [];
         querySnapshot.forEach((item) => {
@@ -70,11 +71,11 @@ export default function FeedScreen({ navigation }) {
       return (
         <Box m="2" >
           <Button justifyContent="flex-start" width="350" borderRadius="10" onPress={() => navigation.navigate("Detail", { object: item })}>
-            <HStack space={5} alignItems="center">
+            <HStack space={3} alignItems="center">
               <Image
                 source={{ uri: item.image }}
                 alt={`Image of ${item.shortDescription}`}
-                size="120"
+                size="100"
                 borderRadius="10"
               />
               <VStack space={2}>
@@ -85,6 +86,10 @@ export default function FeedScreen({ navigation }) {
                 <Text>
                   <Text fontsize="md" bold color="white">Located Near: </Text>
                   <Text color="white">{item.location}</Text>
+                </Text>
+                <Text>
+                  <Text fontsize="md" bold color="white">Time Lost: </Text>
+                  <Text color="white">{new Date(item.timeLost).toLocaleString()}</Text>
                 </Text>
                 <Text>
                   <Text fontsize="md" bold color="white">Status: </Text>

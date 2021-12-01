@@ -4,6 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import MapView, { MarkerAnimated, Marker } from "react-native-maps";
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { getFileObjectAsync } from "../../utils";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import firebase from "firebase/app";
 import "firebase/firestore";
 //FOR IMPORTS: LOOK AT MDB SOCIALS
@@ -11,6 +12,8 @@ import "firebase/firestore";
 
 export default function ReportScreen({ route, navigation }) {
     const [shortDescription, setShortDescription] = useState("");
+    const [timeLost, setTimeLost] = useState();
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [location, setLocation] = useState("");
     const [image, setImage] = useState(undefined);
     const [lat, setLat] = useState(37.8719);
@@ -26,6 +29,23 @@ export default function ReportScreen({ route, navigation }) {
         console.log(coord.longitude)
         setLat(coord.latitude);
         setLong(coord.longitude);
+    };
+
+    // Code for DatePicker (from docs)
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    // Code for DatePicker (from docs)
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    // Code for DatePicker (from docs)
+    const handleConfirm = (date) => {
+        date.setSeconds(0);
+        setTimeLost(date);
+        hideDatePicker();
     };
 
     useEffect(() => {
@@ -58,7 +78,7 @@ export default function ReportScreen({ route, navigation }) {
         // if (!shortD) {
         //   showError("Please enter an event name.");
         //   return;
-        // } else if (!eventDate) {
+        // } else if (!timeLost) {
         //   showError("Please choose an event date.");
         //   return;
         // } else if (!eventLocation) {
@@ -97,6 +117,7 @@ export default function ReportScreen({ route, navigation }) {
             const doc = {
                 preciseLocation: new firebase.firestore.GeoPoint(lat, long),
                 location: location,
+                timeLost: timeLost.getTime(),
                 shortDescription: shortDescription,
                 image: downloadURL,
                 found: false,
@@ -116,8 +137,20 @@ export default function ReportScreen({ route, navigation }) {
     };
 
     const whatDoWithItem = () => {
-        if (mode === 'Finder'){
+        if (mode === 'Finder') {
             return (<Input size="2xl" m="2" placeholder="What did you do with the item?" onChangeText={setNewLocation} value={newLocation}></Input>);
+        }
+    }
+
+    const showDate = () => {
+        if (mode === 'Seeker') {
+            return (<Button
+                mode="outlined"
+                onPress={showDatePicker}
+                style={{ marginTop: 20 }}
+            >
+                {timeLost ? timeLost.toLocaleString() : "Choose a Date"}
+            </Button>)
         }
     }
 
@@ -150,6 +183,13 @@ export default function ReportScreen({ route, navigation }) {
                 <Box margin="3">
                     <VStack space="3" alignItems="center">
                         {whatDoWithItem()}
+                        {showDate()}
+                        <DateTimePickerModal
+                            isVisible={isDatePickerVisible}
+                            mode="datetime"
+                            onConfirm={handleConfirm}
+                            onCancel={hideDatePicker}
+                        />
                         <Button size="lg" onPress={pickImage}>
                             {image ? "Change Image" : "Add an Image of the Item?"}
                         </Button>
