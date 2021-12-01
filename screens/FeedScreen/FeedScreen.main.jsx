@@ -127,7 +127,7 @@ export default function FeedScreen({ navigation }) {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         ></FlatList>
-        <Button m="5" height="65" width="65" borderRadius="100" alignSelf="flex-end" onPress={() => navigation.navigate("Report")}>
+        <Button m="5" height="65" width="65" borderRadius="100" alignSelf="flex-end" onPress={() => navigation.navigate("Report", {mode})}>
           <Text fontSize="3xl" bold color="white">+</Text>
         </Button>
 

@@ -19,23 +19,45 @@ export default function DetailScreen({ route, navigation }) {
                 <VStack alignItems="center" space="3" >
                     <Box bgColor="gray.200" borderRadius="xl" margin="5" padding="5">
                         <VStack alignItems="center" space="3">
-                            <Heading>Lost object: {object.shortDescription}</Heading>
+                            <Heading>Found object: {object.shortDescription}</Heading>
                             <Image
                                 source={{ uri: object.image }}
                                 alt={`Image of ${object.shortDescription}`}
-                                size="200"
+                                size="150"
                                 borderRadius="15"
                             />
-                            <Heading>Last Known Location: {object.location}</Heading>
+
                         </VStack>
                     </Box>
-                    <Heading>Found object?</Heading>
-                    <Text>New Location is At: {object.newLocation}</Text>
-                    <Input placeholder="New location of object (lost and found, personal home, etc.)" value={newLocation} onChangeText={setNewLocation}></Input>
-                    <Button onPress={() => {
+                    <Heading>Where Item was Found</Heading>
+                    <Box style={styles.container}>
+                        <MapView
+                            style={styles.map}
+                            initialRegion={{
+                                latitude: 37.8719,
+                                longitude: -122.2585,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }}
+                        >
+                            <Marker title={object.location} coordinate={{
+                                latitude: object.preciseLocation.latitude,
+                                longitude: object.preciseLocation.longitude,
+                            }}>
+
+                            </Marker>
+                        </MapView>
+                    </Box>
+                    <Box margin="3">
+                        <VStack space="2" alignItems="center">
+                            <Heading size="sm">New Location is At: {object.newLocation}</Heading>
+                            <Heading size="sm">Is this object yours?</Heading>
+                        </VStack>
+                    </Box>
+                    {/* <Input size="xl" placeholder="Where did you find it?" value={newLocation} onChangeText={setNewLocation}></Input> */}
+                    <Button size="lg" onPress={() => {
                         firebase.firestore().collection("items").doc(object.id).update({
                             resolved: true,
-                            newLocation: newLocation
                         })
                         navigation.navigate("Feed");
                     }

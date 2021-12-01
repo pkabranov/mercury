@@ -16,6 +16,10 @@ export default function ReportScreen({ route, navigation }) {
     const [lat, setLat] = useState(37.8719);
     const [long, setLong] = useState(-122.2585);
     const [loading, setLoading] = useState(false)
+    const [newLocation, setNewLocation] = useState("");
+
+    const mode = route.params.mode
+    console.log(mode)
 
     const onMarkerDragEnd = (coord) => {
         console.log(coord.latitude)
@@ -69,47 +73,53 @@ export default function ReportScreen({ route, navigation }) {
         // } else {
         //   setLoading(true);
         // }
-    
+
         try {
-          setLoading(true)    
-          // Firestore wants a File Object, so we first convert the file path
-          // saved in eventImage to a file object.
-          console.log("getting file object");
-          const object = (await getFileObjectAsync(image));
-        
-          // Generate a brand new doc ID by calling .doc() on the socials node.
-          const ref = firebase.firestore().collection("items").doc();
-          console.log("putting file object");
-          const result = await firebase
-            .storage()
-            .ref()
-            .child(ref.id + ".jpg")
-            .put(object);
-          console.log("getting download url");
-          const downloadURL = await result.ref.getDownloadURL();
-          // TODO: You may want to update this SocialModel's default
-          // fields by adding one or two attributes to help you with
-          // interested/likes & deletes
-          const doc = {
-            preciseLocation: new firebase.firestore.GeoPoint(lat, long),
-            location: location,
-            shortDescription: shortDescription,
-            image: downloadURL,
-            found: false,
-            lost: true,
-            newLocation: "",
-            resolved: false,
-            id: ref.id
-          };
-          console.log("setting download url");
-          await ref.set(doc);
-          setLoading(false)
-          navigation.goBack();
+            setLoading(true)
+            // Firestore wants a File Object, so we first convert the file path
+            // saved in eventImage to a file object.
+            console.log("getting file object");
+            const object = (await getFileObjectAsync(image));
+
+            // Generate a brand new doc ID by calling .doc() on the socials node.
+            const ref = firebase.firestore().collection("items").doc();
+            console.log("putting file object");
+            const result = await firebase
+                .storage()
+                .ref()
+                .child(ref.id + ".jpg")
+                .put(object);
+            console.log("getting download url");
+            const downloadURL = await result.ref.getDownloadURL();
+            // TODO: You may want to update this SocialModel's default
+            // fields by adding one or two attributes to help you with
+            // interested/likes & deletes
+            const doc = {
+                preciseLocation: new firebase.firestore.GeoPoint(lat, long),
+                location: location,
+                shortDescription: shortDescription,
+                image: downloadURL,
+                found: false,
+                lost: true,
+                newLocation: newLocation,
+                resolved: false,
+                id: ref.id
+            };
+            console.log("setting download url");
+            await ref.set(doc);
+            setLoading(false)
+            navigation.goBack();
         } catch (error) {
             console.log(error.message);
             setLoading(false)
         }
-      };
+    };
+
+    const whatDoWithItem = () => {
+        if (mode === 'Finder'){
+            return (<Input size="2xl" m="2" placeholder="What did you do with the item?" onChangeText={setNewLocation} value={newLocation}></Input>);
+        }
+    }
 
     return (
         <Box alignItems="center">
@@ -117,7 +127,7 @@ export default function ReportScreen({ route, navigation }) {
                 <Box m="3">
                     <Input size="2xl" m="2" placeholder="Item Description" onChangeText={setShortDescription} value={shortDescription}></Input>
                     <Input size="2xl" m="2" placeholder="Rough Location of Item" onChangeText={setLocation} value={location}></Input>
-                    <Heading m="2" size="md"> Where did you lose/find the item? </Heading>
+                    <Heading m="2" size="md"> Where did you {mode === "Seeker" ? "lose" : "find"} the item? </Heading>
                 </Box>
                 <Box style={styles.container}>
                     <MapView
@@ -137,8 +147,9 @@ export default function ReportScreen({ route, navigation }) {
                         </Marker>
                     </MapView>
                 </Box>
-                <Box>
+                <Box margin="3">
                     <VStack space="3" alignItems="center">
+                        {whatDoWithItem()}
                         <Button size="lg" onPress={pickImage}>
                             {image ? "Change Image" : "Add an Image of the Item?"}
                         </Button>
@@ -161,6 +172,6 @@ const styles = StyleSheet.create({
     },
     map: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height / 2,
+        height: Dimensions.get('window').height / 2.4,
     },
 });
