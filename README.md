@@ -10,3 +10,20 @@ In dense urban areas, people lose items every day. One way to leverage this envi
 - **Reward System:** Seekers can post rewards for finding their items, finders can earn those rewards
 - **In-app chat:** Finders and seekers can talk to each other to exchange the item (with a possible reward).
 - **ID Verification:** Users need to have their Cal Student ID to create an account.
+
+## Finder Mode (browse through lost items)
+
+<img width="1728" alt="Screen Shot 2021-12-01 at 4 10 41 PM" src="https://user-images.githubusercontent.com/33604854/144334474-ac1665be-ff54-4967-9335-eccf59fb05bd.png">
+
+## Seeker Mode (browse through found items)
+
+<img width="1728" alt="Screen Shot 2021-12-01 at 4 10 54 PM" src="https://user-images.githubusercontent.com/33604854/144334483-fb595926-7821-4174-812e-e3f794288e7e.png">
+
+## Report Item Found 
+
+<img width="1728" alt="Screen Shot 2021-12-01 at 4 11 06 PM" src="https://user-images.githubusercontent.com/33604854/144334490-9d7f64ac-3597-442f-b0ab-06b2ac0d215f.png">
+
+
+## Report Item Lost
+
+<img width="1728" alt="Screen Shot 2021-12-01 at 4 11 13 PM" src="https://user-images.githubusercontent.com/33604854/144334519-cf2fe96f-367e-4b51-ad5a-77b5bb2c5b76.png">
